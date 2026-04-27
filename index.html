@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dress Collection | Photography Room</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.4.0/luminous-basic.min.css">
+    <style>
+        :root {
+            --gold: #b5a47e;
+            --bg: #fdfdfb;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Noto Serif JP', serif;
+            background-color: var(--bg);
+            color: #333;
+            margin: 0;
+            line-height: 1.8;
+        }
+
+        header {
+            text-align: center;
+            padding: 100px 20px;
+            background: #fff;
+        }
+
+        header h1 {
+            letter-spacing: 0.3em;
+            font-weight: 300;
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        /* セクションタイトル */
+        .section-category {
+            margin-top: 80px;
+            border-bottom: 1px solid var(--gold);
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .section-category h2 {
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .section-category .price-tag {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* グリッドレイアウト（スマホ対応） */
+        .dress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .dress-item {
+            background: var(--card-bg);
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease;
+        }
+
+        .dress-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .dress-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: zoom-in;
+        }
+
+        .dress-info {
+            text-align: center;
+            padding-top: 15px;
+        }
+
+        .dress-name {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .dress-brand {
+            font-size: 0.75rem;
+            color: #888;
+            letter-spacing: 0.05em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 100px 20px;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 600px) {
+            header { padding: 60px 20px; }
+            header h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>COSTUME COLLECTION</h1>
+</header>
+
+<div class="container">
+
+    <div class="section-category">
+        <h2>Premium Brand</h2>
+        <span class="price-tag">+¥220,000</span>
+    </div>
+    <div class="dress-grid">
+        <div class="dress-item">
+            <a href="images/antonio_riva_sophia_front.webp" class="zoom" data-gallery="antonio-sophia">
+                <img src="images/antonio_riva_sophia_front.webp" alt="ANTONIO RIVA - SOPHIA">
+            </a>
+            <a href="images/antonio_riva_sophia_back.webp" class="zoom" data-gallery="antonio-sophia" style="display:none;"></a>
+            <div class="dress-info">
+                <div class="dress-brand">ANTONIO RIVA</div>
+                <div class="dress-name">SOPHIA</div>
+            </div>
+        </div>
+        </div>
+
+    <div class="section-category">
+        <h2>Import Selection</h2>
+        <span class="price-tag">+¥132,000</span>
+    </div>
+    <div class="dress-grid">
+        <div class="dress-item">
+            <a href="images/genoise.webp" class="zoom" data-gallery="genoise">
+                <img src="images/genoise.webp" alt="GENOISE">
+            </a>
+            <div class="dress-info"><div class="dress-name">GENOISE</div></div>
+        </div>
+    </div>
+
+    <div class="section-category">
+        <h2>Designer's Brand</h2>
+        <span class="price-tag">+¥66,000〜</span>
+    </div>
+    <div class="dress-grid">
+        <div class="dress-item">
+            <a href="images/kh-0503.webp" class="zoom" data-gallery="kh0503">
+                <img src="images/kh-0503.webp" alt="KIYOKO HATA">
+            </a>
+            <div class="dress-info"><div class="dress-brand">KIYOKO HATA</div><div class="dress-name">KH-0503</div></div>
+        </div>
+        <div class="dress-item">
+            <a href="images/isamu_v1125.webp" class="zoom" data-gallery="v1125">
+                <img src="images/isamu_v1125.webp" alt="ISAMU MORITA">
+            </a>
+            <div class="dress-info"><div class="dress-brand">ISAMU MORITA</div><div class="dress-name">V1125</div></div>
+        </div>
+    </div>
+
+    <div class="section-category">
+        <h2>Standard Upgrade</h2>
+        <span class="price-tag">+¥44,000</span>
+    </div>
+    <div class="dress-grid">
+        <div class="dress-item">
+            <a href="images/dl079.webp" class="zoom" data-gallery="dl079">
+                <img src="images/dl079.webp" alt="Dolce VIVIAN">
+            </a>
+            <div class="dress-info"><div class="dress-name">DL079 (WD)</div></div>
+        </div>
+        </div>
+
+    <div class="section-category">
+        <h2>Plan Collection</h2>
+        <span class="price-tag">¥0</span>
+    </div>
+    <div class="dress-grid">
+        <div class="dress-item">
+            <a href="images/rv72.webp" class="zoom" data-gallery="rv72">
+                <img src="images/rv72.webp" alt="Royal VIVIAN">
+            </a>
+            <div class="dress-info"><div class="dress-name">RV72 (WD)</div></div>
+        </div>
+        <div class="dress-item">
+            <a href="images/k43.webp" class="zoom" data-gallery="k43">
+                <img src="images/k43.webp" alt="白無垢">
+            </a>
+            <div class="dress-info"><div class="dress-name">K43 (白無垢)</div></div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Glastonia Photography Room</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.4.0/Luminous.min.js"></script>
+<script>
+    // 同一衣装の複数画像（data-galleryが同じもの）をグループ化してスワイプ可能にする
+    const activeLuminous = [];
+    document.querySelectorAll('.zoom').forEach(el => {
+        activeLuminous.push(new Luminous(el, {
+            gallery: {
+                active: true // これで左右切り替えが可能になります
+            }
+        }));
+    });
+</script>
+
+</body>
+</html>

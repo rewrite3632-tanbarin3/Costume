@@ -8,34 +8,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.4.0/luminous-basic.min.css">
     <style>
         :root { --gold: #b5a47e; --bg: #fdfdfb; --price-color: #a67c00; --brand-color: #888; }
-        body { font-family: 'Noto Serif JP', serif; background-color: var(--bg); color: #333; margin: 0; padding-bottom: 50px; }
-        header { text-align: center; padding: 40px 20px; background: #fff; }
-        header h1 { letter-spacing: 0.25em; font-weight: 300; font-size: 1.5rem; margin: 0; }
-        .nav-menu { position: sticky; top: 0; background: rgba(255,255,255,0.98); padding: 12px; text-align: center; z-index: 1000; border-bottom: 1px solid #eee; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-        .nav-menu a { text-decoration: none; color: #666; font-size: 0.75rem; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .category-title { font-size: 1.4rem; border-left: 4px solid var(--gold); padding-left: 12px; margin: 40px 0 20px; letter-spacing: 0.1em; }
-
-        /* 画像エリアの固定（チカチカ防止） */
-        .dress-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .dress-item { background: #fff; padding: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-radius: 4px; }
-        .img-box { width: 100%; aspect-ratio: 3 / 4; background-color: #eee; overflow: hidden; margin-bottom: 10px; position: relative; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
-        
-        .dress-info { text-align: center; font-size: 0.8rem; }
-        .brand { color: var(--brand-color); font-size: 0.65rem; margin-bottom: 2px; }
-        .id { font-weight: 600; margin-bottom: 4px; }
-        .price { color: var(--price-color); font-weight: 600; }
-
-        @media (max-width: 600px) {
-            .dress-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            header h1 { font-size: 1.1rem; }
-        }
+        body { font-family: 'Noto Serif JP', serif; background-color: var(--bg); color: #333; margin: 0; padding-bottom: 50px; scroll-behavior: smooth; }
+        header { text-align: center; padding: 50px 20px; background: #fff; border-bottom: 1px solid #f0f0f0; }
+        header h1 { letter-spacing: 0.25em; font-weight: 300; font-size: 1.6rem; margin: 0; line-height: 1.5; }
+        .nav-menu { position: sticky; top: 0; background: rgba(255,255,255,0.95); padding: 15px; text-align: center; z-index: 100; border-bottom: 1px solid #eee; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: #666; font-size: 0.8rem; border: 1px solid #ccc; padding: 6px 15px; border-radius: 20px; transition: 0.3s; }
+        .nav-menu a:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .category-section { margin-top: 60px; }
+        .category-title { font-size: 1.6rem; border-left: 5px solid var(--gold); padding-left: 15px; margin-bottom: 30px; font-weight: 600; letter-spacing: 0.1em; color: #444; }
+        .dress-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
+        .dress-item { background: #fff; padding: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; border-radius: 2px; position: relative; }
+        .dress-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .photo-count { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; pointer-events: none; z-index: 10; }
+        .main-photo-wrapper { position: relative; margin-bottom: 10px; }
+        .dress-item img.main-img { width: 100%; height: auto; cursor: pointer; aspect-ratio: 3/4; object-fit: cover; display: block; border-radius: 2px; }
+        .thumb-container { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; min-height: 40px; }
+        .thumb-item { width: 42px; height: 56px; cursor: pointer; border: 1px solid #eee; border-radius: 2px; overflow: hidden; transition: 0.2s; }
+        .thumb-item:hover { border-color: var(--gold); opacity: 0.8; }
+        .thumb-item img { width: 100%; height: 100%; object-fit: cover; }
+        .dress-info { padding: 12px 0 5px; border-top: 1px solid #eee; margin-top: 10px; }
+        .brand-name { font-size: 0.7rem; color: var(--brand-color); letter-spacing: 0.05em; margin-bottom: 2px; text-transform: uppercase; }
+        .dress-id { font-weight: 600; font-size: 0.85rem; color: #555; margin-bottom: 4px; }
+        .dress-price { font-size: 0.9rem; color: var(--price-color); font-weight: 600; }
+        @media (max-width: 600px) { .dress-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } header h1 { font-size: 1.2rem; } .thumb-item { width: 38px; height: 50px; } }
     </style>
 </head>
 <body>
 
-<header><h1>PHOTO WEDDING COSTUME</h1></header>
+<header><h1>PHOTO WEDDING<br>COSTUME COLLECTION</h1></header>
 
 <nav class="nav-menu">
     <a href="#plan">PLAN-IN</a>
@@ -45,82 +46,152 @@
 </nav>
 
 <div class="container">
-    <section id="plan"><h2 class="category-title">Plan-inclusive</h2><div id="plan-grid" class="dress-grid"></div></section>
-    <section id="wedding"><h2 class="category-title">Wedding Dress</h2><div id="wedding-grid" class="dress-grid"></div></section>
-    <section id="color"><h2 class="category-title">Color Dress</h2><div id="color-grid" class="dress-grid"></div></section>
-    <section id="tuxedo"><h2 class="category-title">Tuxedo</h2><div id="tuxedo-grid" class="dress-grid"></div></section>
+    <section id="plan" class="category-section"><h2 class="category-title">Plan-inclusive</h2><div id="plan-grid" class="dress-grid"></div></section>
+    <section id="wedding" class="category-section"><h2 class="category-title">Wedding Dress</h2><div id="wedding-grid" class="dress-grid"></div></section>
+    <section id="color" class="category-section"><h2 class="category-title">Color Dress</h2><div id="color-grid" class="dress-grid"></div></section>
+    <section id="tuxedo" class="category-section"><h2 class="category-title">Tuxedo</h2><div id="tuxedo-grid" class="dress-grid"></div></section>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.4.0/Luminous.min.js"></script>
 
 <script>
-    // ブランド・価格判定ロジック [cite: 7, 8, 14, 15, 25]
-    function getCostumeInfo(file, cat) {
-        const name = file.toUpperCase();
-        let id = file.replace(/\.[^/.]+$/, "").replace(/^\d+\./, "").replace(/①|②|_1|_2/g, "").trim();
-        
-        let brand = "VIVIAN";
-        let priceText = (cat === 'plan') ? "プラン内 ¥0" : "+ ¥44,000"; [cite: 8, 18]
+    function getInfo(filename, categoryKey) {
+        const originalName = filename.toUpperCase();
+        let cleanName = filename.replace(/＿/g, "_").replace(/\.[^/.]+$/, "").trim();
+        let baseID = cleanName.replace(/^\d+\./, ""); 
 
-        if (name.includes("ANTONIO") || name.match(/SIBILLA|SISSI|ADELAIDE|CRISTINA|LUCIA/)) { 
-            brand = "ANTONIO RIVA"; priceText = "+ ¥220,000"; [cite: 11, 35]
-        } else if (name.match(/EN|E0|KF|GENOISE/)) { 
-            brand = "IMPORT SELECTION"; priceText = "+ ¥132,000"; [cite: 17, 25, 26]
-        } else if (name.includes("KH") || name.includes("ST") || name.includes("V2192")) { 
-            brand = "KIYOKO HATA"; priceText = "+ ¥88,000"; [cite: 14, 25]
-        } else if (name.match(/V1125|V1140|V1141|V1151|V2176|V2182|V2239|V2225|V2157/)) { 
-            brand = "ISAMU MORITA"; priceText = "+ ¥66,000"; [cite: 19, 25]
-        } else if (name.includes("JILL")) { 
-            brand = "JILL STUART"; priceText = "+ ¥66,000"; [cite: 11, 15]
-        } else if (name.includes("RV") && !name.includes("RVT")) { 
-            brand = "Royal VIVIAN"; priceText = (cat === 'plan') ? "プラン内 ¥0" : "+ ¥88,000"; [cite: 10, 31, 36]
-        } else if (name.includes("DL")) { 
-            brand = "Dolce VIVIAN"; priceText = (cat === 'plan') ? "プラン内 ¥0" : "+ ¥44,000"; [cite: 10, 30]
-        }
+        baseID = baseID.replace(/ANTONIO\s*RIVA|ANTONIORIVA|ANTONIO|RIVA/gi, "")
+                       .replace(/JILL\s*STUART/gi, "")
+                       .replace(/(_OffWhite|_image|_bluegreen|_orange|_Pink|_nm02|_全|_名|sideback|着脱|ベージュ|ｸﾞﾚｰｼﾞｭ|★|◎)/gi, "");
         
-        return { brand, id, price: priceText };
+        baseID = baseID.replace(/[①-⑨]/g, ""); 
+        baseID = baseID.replace(/[山名山]/g, ""); 
+        baseID = baseID.replace(/(_|-|\s)+([0-9a-zA-Z]{1,3})$/, "");
+        baseID = baseID.replace(/^[_\s-]+|[_\s-]+$/g, "").trim();
+
+        const upperBase = baseID.toUpperCase().replace(/-/g, ""); // 判定用にハイフン除去
+        let brand = "VIVIAN";
+        let priceValue = 44000;
+
+        // 個別指定およびブランド・価格判定
+        if (originalName.includes("OPブラウス") || originalName.includes("OPBLOUSE")) {
+            brand = "IMPORT SELECTION"; priceValue = 132000;
+        } else if (upperBase === "V1145" || upperBase === "V1135") {
+            brand = "LUXE"; priceValue = 66000;
+        } else if (upperBase === "V1136" || upperBase === "V1137") {
+            brand = "DEWY"; priceValue = 66000;
+        } else if (upperBase === "V1138") {
+            brand = "ANNNA BLANCA"; priceValue = 66000;
+        } else if (upperBase === "V1152") {
+            brand = "Delafore"; priceValue = 66000;
+        } else if (originalName.match(/SOPHIA|URSULA|SIBILLA|SISSI|ADELAIDE|CRISTINA|LUCIA|ANTONIO/)) {
+            brand = "ANTONIO RIVA"; priceValue = 220000;
+        } else if (upperBase.match(/^(EN|E0|KF|R10|RA10|GENOISE)/)) {
+            brand = "IMPORT SELECTION"; priceValue = 132000;
+        } else if (upperBase.match(/^(KH|ST)/) || upperBase === "V2192") {
+            brand = "KIYOKO HATA"; priceValue = 88000;
+        } else if (upperBase.match(/^(V1125|V1140|V1141|V1151|V2176|V2182|V2239|V2225|V2157)/)) {
+            brand = "ISAMU MORITA"; priceValue = 66000;
+        } else if (upperBase.startsWith("JILL") || originalName.includes("JILL")) {
+            brand = "JILL STUART"; priceValue = 66000;
+        } else if (upperBase.startsWith("ANT")) {
+            brand = "ANTEPRIMA"; priceValue = 66000;
+        } else if (upperBase.startsWith("LA")) {
+            brand = "LAURA ASHLEY"; priceValue = 66000;
+        } else if (upperBase.startsWith("RV") && !upperBase.startsWith("RVT")) {
+            brand = "Royal VIVIAN"; priceValue = 88000;
+        } else if (upperBase.startsWith("DL") || upperBase.startsWith("DLC")) {
+            brand = "Dolce VIVIAN"; priceValue = 44000;
+        } else if (upperBase.startsWith("RVT") || upperBase.startsWith("V3")) {
+            brand = (upperBase.startsWith("RVT")) ? "Royal VIVIAN" : "VIVIAN";
+            priceValue = 44000;
+        } else if (upperBase === "V1139") {
+            brand = "AMANTHA BRIDE";
+        } else if (upperBase.match(/(白無垢|大和|K\d+)/)) {
+            brand = "TRADITIONAL";
+        }
+
+        let priceText = `+ ¥${priceValue.toLocaleString()}`;
+        if (categoryKey === 'plan') {
+            priceText = "plan ¥0";
+            let planOrderScore = 99;
+            if (upperBase.match(/^(RV|DL\d)/) && !upperBase.startsWith("RVT")) { planOrderScore = 1; } 
+            else if (upperBase.match(/^(V2|DLC)/)) { planOrderScore = 2; } 
+            else if (upperBase.startsWith("RVT") || upperBase.startsWith("V3")) { planOrderScore = 3; } 
+            else if (upperBase.match(/(白無垢|大和|K\d+)/)) { planOrderScore = 4; }
+            priceValue = planOrderScore; 
+        }
+
+        return { brand, displayName: baseID, priceText, priceValue, baseID };
     }
 
-    // 画像データの定義 
-    const costumeData = {
-        plan: { folder: "plan", grid: "plan-grid", files: ["29.白無垢②.jpg", "30.新大和白.jpg", "31.新大和黒.jpg", "32.DLC88①.jpg", "01.RV72①.jpg", "11.V2142①.jpg", "26.K43.jpg"] },
-        wedding: { folder: "wedding", grid: "wedding-grid", files: ["ANTONIO RIVA_Sibilla_1.jpg", "EN1005_1.jpg", "JILL0359_1.jpg", "KF112_1.jpg", "RV081_1.jpg", "V1125_1.jpg"] },
-        color: { folder: "color", grid: "color-grid", files: ["ANT0163_2.jpg", "JILL0183_1.jpg", "KH-0503Re_1.jpg", "V2213_1.jpg"] },
-        tuxedo: { folder: "tuxedo", grid: "tuxedo-grid", files: ["RVT311_1.jpg", "V3078_1.jpg", "FK0149_1.jpg"] }
+    const data = {
+        plan: { folder: "plan", gridId: "plan-grid", files: ["29.白無垢②.jpg", "30.新大和白.jpg", "31.新大和黒.jpg", "32.DLC88①.jpg", "33.DLC88②.jpg", "01.RV72①.jpg", "02.RV72②.jpg", "03.RV14①.jpg", "04.RV14②.jpg", "05.RV71①.jpg", "06.RV71②.jpg", "07.DL95①.jpg", "08.DL95②.jpg", "09.DL93①.jpg", "10.DL93②.jpg", "11.V2142①.jpg", "12.V2142②.jpg", "13.V2157①.jpg", "14.V2157②.jpg", "15.V2135①.jpg", "16.V2135②.jpg", "17.DLC89①.jpg", "18.DLC89②.jpg", "19.DLC90①.jpg", "20.DLC90②.jpg", "21.RVT304.jpg", "22.RVT323.jpg", "23.RVT310.jpg", "24.RVT325.jpg", "25.RVT331.jpg", "26.K43.jpg", "27.K85.jpg", "28.K30.jpg"] },
+        wedding: { folder: "wedding", gridId: "wedding-grid", files: ["ANTONIO RIVA_Sibilla_1.jpg", "ANTONIO RIVA_Sibilla_2.jpg", "ANTONIO RIVA_SISSI_1.jpg", "ANTONIO RIVA_SISSI_2.jpg", "ANTONIORIVA ADELAIDE 1.jpg", "ANTONIORIVA ADELAIDE 2.jpg", "ANTONIORIVA_CRISTINA_1.jpg", "ANTONIORIVA_CRISTINA_2.jpg", "ANTONIORIVA_LUCIA_1.jpg", "ANTONIORIVA_LUCIA_2.jpg", "DL079_1.jpg", "DL079_2.jpg", "DL084_1.jpg", "DL084_2.jpg", "DL086_1.jpg", "DL086_2.jpg", "DL-093_1.jpg", "DL-093_2.jpg", "DL094_1.jpg", "DL094_2.jpg", "DL095_1.jpg", "DL095_2.jpg", "DL095_3.jpg", "DL095_4.jpg", "DL095_5.jpg", "DL096_2.jpg", "DL096_3.jpg", "DL098_1.jpg", "DL098_2.jpg", "DL099_1.jpg", "DL099_2.jpg", "DL099_3.jpg", "DL099_4.jpg", "DL100.jpg", "DL100_1.jpg", "DL100_2.jpg", "DL101_1.jpg", "DL101_2.jpg", "DL102_1.jpg", "DL102_2.jpg", "DL103_1.jpg", "DL103_2.jpg", "DL103_3.jpg", "DL103_4.jpg", "DL-104_1_全.jpg", "DL-104_2_全.jpg", "DL-104_3_全.jpg", "DL105_1.jpg", "DL105_b.jpg", "DL105_o.jpg", "DL-106_1.jpg", "DL-106_2.jpg", "DL-106_3.jpg", "DL-106_b.jpg", "E0557_1.jpg", "E0557_2.jpg", "E0611_1.jpg", "E0650_1.jpg", "E0650_2.jpg", "EN1004_1.jpg", "EN1004_2.jpg", "EN1005_1.jpg", "EN1005_2.jpg", "EN1008_1.jpg", "EN1008_2.jpg", "EN1010_1.jpg", "EN1010_2.jpg", "EN1012_1.jpg", "EN1012_2.jpg", "EN1015_1.jpg", "EN1015_2.jpg", "EN1016_1.jpg", "EN1016_2.jpg", "EN1017_1.jpg", "EN1017_2.jpg", "EN1018_1.jpg", "EN1018_2.jpg", "EN1018_3.jpg", "EN1018_4.jpg", "GENOISE.jpg", "JILL0222_1.jpg", "JILL0231_OffWhite_1.jpg", "JILL0231_OffWhite_2.jpg", "JILL0231_OffWhite_image.jpg", "JILL0243_OffWhite_1.jpg", "JILL0243_OffWhite_2.jpg", "JILL0243_OffWhite_3.jpg", "JILL0255_1.jpg", "JILL0255_2.jpg", "JILL0257_1.jpg", "JILL0257_2.jpg", "JILL0271_OffWhite_1.jpg", "JILL0271_OffWhite_2.jpg", "JILL0271_OffWhite_3.jpg", "JILL0271_OffWhite_4.jpg", "JILL0273_OffWhite_1.jpg", "JILL0273_OffWhite_2.jpg", "JILL0273_OffWhite_3.jpg", "JILL-0297_1.JPG", "JILL-0297_2.JPG", "JILL-0297_3.JPG", "JILL0303_OffWhite_1.jpg", "JILL0303_OffWhite_2.jpg", "JILL0303_OffWhite_3.jpg", "JILL0307_1.jpg", "JILL0307_2.jpg", "JILL0307_3.jpg", "JILL0314_1.jpg", "JILL0314_2.jpg", "JILL0314_3.jpg", "JILL0326_1.jpg", "JILL0326_2.jpg", "JILL0326_3.jpg", "JILL0359_1.jpg", "JILL0359_2.jpg", "KF112_1.jpg", "KF112_2.jpg", "KF141_1.jpg", "KF141_2.jpg", "KF6203_1.jpg", "KF6203_2.jpg", "OPブラウス⑧_1.jpg", "OPブラウス⑧_2.jpg", "R1001_1.jpg", "R1001_2.jpg", "RA1001_1.jpg", "RA1001_2.jpg", "RA1004_1.jpg", "RA1004_2.jpg", "RV014_4.jpg", "RV014_5.jpg", "RV016_4.jpg", "RV016_5.jpg", "RV044.jpg", "RV056_1.jpg", "RV056_2.jpg", "RV056_3.jpg", "RV058_1.jpg", "RV058＿2.jpg", "RV058＿3.jpg", "RV059_1.jpg", "RV059_2.jpg", "RV060_1.jpg", "RV060_2.jpg", "RV060_3.jpg", "RV066_1.jpg", "RV066_2.jpg", "RV067_1.jpg", "RV067_2.jpg", "RV069_1.jpg", "RV069_2.jpg", "RV070_1.jpg", "RV070_2.jpg", "RV071_1.jpg", "RV071_2.jpg", "RV072_1.jpg", "RV072_2.jpg", "RV072_3.jpg", "RV073_1.jpg", "RV074_1.jpg", "RV074_2.jpg", "RV074_3.jpg", "RV074_4.jpg", "RV075_1.jpg", "RV075_2.jpg", "RV075_3.jpg", "RV076_1.jpg", "RV076_2.jpg", "RV076_3.jpg", "RV076_4.jpg", "RV076_5.jpg", "RV076_6.jpg", "RV078_1.jpg", "RV078_2.jpg", "RV078_3.jpg", "RV078_4.jpg", "RV078_5.jpg", "RV078_6.jpg", "RV079_1.jpg", "RV079_2.jpg", "RV079_3.jpg", "RV079_4.jpg", "RV079_5.jpg", "RV080_1.jpg", "RV080_2.jpg", "RV080_3.jpg", "RV080_4.jpg", "RV081_1.jpg", "RV081_2.jpg", "RV081_3.jpg", "RV081_4.jpg", "RV082_1.jpg", "RV082_2.jpg", "RV082_3.jpg", "RV083_1.jpg", "RV083_2.jpg", "RV083_3.jpg", "RV083_4.jpg", "RV084_1.jpg", "RV084_2.jpg", "RV084_3.jpg", "RV084_4.jpg", "RV086_1.jpg", "RV086_2.jpg", "RV086_3.jpg", "RV086_4.jpg", "RV087_1.jpg", "RV087_2.jpg", "RV087_3.jpg", "RV088_1.jpg", "RV088_2.jpg", "RV088_3.jpg", "RV089_1.jpg", "RV089_2.jpg", "RV090_1.jpg", "RV090_2.jpg", "RV090_3.jpg", "RV090_4.jpg", "RV090_5.jpg", "RV090_6.jpg", "RV091_1.jpg", "RV091_2.jpg", "RV091_3.jpg", "RV091_4.jpg", "RV091_5.jpg", "RV092_1.jpg", "RV092_2.jpg", "RV092_3.jpg", "RV093_1.jpg", "RV093_2.jpg", "RV093_3.jpg", "RV094_1.jpg", "RV094_2.jpg", "RV094_3.jpg", "RV094_4.jpg", "RV094_5.jpg", "RV094_6.jpg", "RV-095_1_全.jpg", "RV-095_2_全.jpg", "RV-096_1_全.jpg", "RV-096_2_全.jpg", "RV-096_3_全.jpg", "RV-097_1_全.jpg", "RV-097_2_全.jpg", "RV-097_3_全.jpg", "RV-097_4_全.jpg", "RV-098_1_全.jpg", "RV-098_2_全.jpg", "RV-098_3_全.jpg", "RV-098_4_全.jpg", "RV-098_5_全.jpg", "RV-099_1_全.jpg", "RV-099_2_全.jpg", "RV-099_3_全.jpg", "RV-100_1_全.jpg", "RV-100_2_全.jpg", "RV-101_1.jpg", "RV-101_2.jpg", "RV-101_bS.jpg", "RV-102_1.jpg", "RV-102_b.jpg", "RV-103_1.jpg", "RV-103_b.jpg", "RV-104_1.jpg", "RV-104_2.jpg", "RV-104_b.jpg", "RV-104_b1.jpg", "RV-104_b2.jpg", "V1114 _2.jpg", "V1114_1.jpg", "V1118_1.jpg", "V1118_2.jpg", "V1125_1.jpg", "V1125_2.jpg", "V1132_1.jpg", "V1132_2.jpg", "V1133_1.jpg", "V1133_2.jpg", "V1135_1.jpg", "V1135_2.jpg", "V-1136_1.jpg", "V-1136_2.jpg", "V-1136_3.jpg", "V-1137_1.jpg", "V-1137_2.jpg", "V-1138_1.jpg", "V-1138_2.jpg", "V1139_1.jpg", "V1139_2.jpg", "V1140_1.jpg", "V1140_2.jpg", "V1141_1.jpg", "V1141_2.jpg", "V1141_3.jpg", "V1142_1.jpg", "V1142_2.jpg", "V1143_1.jpg", "V1143_2.jpg", "V1144_1.jpg", "V1144_2.JPG", "V1145.jpg", "V-1146_1_名.jpg", "V-1146_2_名.jpg", "V-1148_1_名.jpg", "V-1148_2_名.jpg", "V-1148_3_名.jpg", "V-1151_1.jpg", "V-1151_2.jpg", "V1152_1.jpg", "V1152_2.jpg", "V1152_3.jpg", "V-1153.jpg", "ANTONIO RIVA SOPHIA_1.jpg", "ANTONIO RIVA SOPHIA_2.jpg", "ANTONIO RIVA Ursula_1.jpg", "ANTONIO RIVA Ursula_2.jpg"] },
+        color: { folder: "color", gridId: "color-grid", files: ["ANT0163_2.jpg", "ANT0164_1.jpg", "ANT0179_1.jpg", "ANT0179_2.jpg", "ANT0193.jpg", "ANT0196_1.jpg", "ANT0196_2.jpg", "ANT0196_3.jpg", "ANT0206.jpg", "ANT0210_1.jpg", "ANT0210_2.jpg", "ANT0224_1.jpg", "ANT0224_2.jpg", "ANT0224_3.jpg", "ANT0225_1.jpg", "ANT0225_2.jpg", "ANT0225_3.jpg", "ANT0254_1.jpg", "ANT0254_2.jpg", "ANT0279_bluegreen-001.jpg", "ANT0279_bluegreen-1.jpg", "ANT0279_bluegreen-2.jpg", "ANT0288_4.jpg", "ANT0288_orange-001.jpg", "ANT0288_orange-002.jpg", "ANT0297_1.jpg", "ANT0297_2.jpg", "ANT0315_1.jpg", "ANT0315_2.jpg", "ANT0328_001.jpg", "ANT0328_002.jpg", "ANT0328_3.jpg", "ANT0328_004.jpg", "DLC084_1.jpg", "DLC084_2.jpg", "DLC085_1.jpg", "DLC085_2.jpg", "DLC088_1.jpg", "DLC088_2.jpg", "DLC089_1.jpg", "DLC090_1.jpg", "DLC090_2.jpg", "DLC092_1.jpg", "DLC092_2.jpg", "DLC092_3.jpg", "DLC092_4.jpg", "EN1005_1.jpg", "EN1005_2.jpg", "JILL0183_1.jpg", "JILL0183_2.jpg", "JILL0241_1.jpg", "JILL0241_2.jpg", "JILL0268_1.jpg", "JILL0268_2.jpg", "JILL-0283_BlueGreen_1.jpg", "JILL-0283_BlueGreen_2.jpg", "JILL-0283_BlueGreen_3.jpg", "JILL0306_1.jpg", "JILL0306_2.jpg", "JILL0355_1.jpg", "JILL0355_2.jpg", "JILL0355_3.jpg", "JILL0356_1.jpg", "JILL0356_2.jpg", "JILL0372_1.jpg", "JILL0372_2 .jpg", "JILL0380_1.jpg", "JILL0380_2.jpg", "KF135_1.jpg", "KF135_2.jpg", "KF135_3.jpg", "KF135_4.jpg", "KF148_1.jpg", "KF148_2.jpg", "KF155_1.jpg", "KF155_2.jpg", "KH-0035 Gold1.jpg", "KH-0035 Gold2.jpg", "KH-0043_1.jpg", "KH-0043_2.jpg", "KH-0043_3.jpg", "KH-0482LA_1.jpg", "KH-0482LA_2.jpg", "KH-0486BR_1.jpg", "KH-0486BR_2.jpg", "KH-0486グレー_nm02.jpg", "KH-0486グレーsideback_nm02.jpg", "KH-0503Pi1.jpg", "KH-0503Pi2_.jpg", "KH-0503Re_1.jpg", "KH-0503Re_2.jpg", "KH-0503Re_3.jpg", "KH-0516ベージュ01★◎.jpg", "KH-0516ベージュ02image.jpg", "KH-0516ベージュ03.jpg", "KH-0516ベージュ04着脱.jpg", "KH-0525_1.jpg", "KH-0525_2.jpg", "KH-0525_3.jpg", "KH-0532_1.jpg", "KH-0532_2.jpg", "KH-0532_3.jpg", "KH-0563_Pink_F1.jpg", "KH-0563_Pink_F2.jpg", "KH-0567_1.jpg", "KH-0567_2.jpg", "KH-0567_3.jpg", "KH-0574_1.jpg", "KH-0574_2.jpg", "KH-0574_3.jpg", "KH-0580_1.jpg"] },
+        tuxedo: { folder: "tuxedo", gridId: "tuxedo-grid", files: ["RVT311_1.jpg", "RVT313_1.jpg", "RVT317_1.jpg", "RVT320_1.jpg", "RVT323_1.jpg", "RVT324_1.jpg", "RVT325.jpg", "RVT326_1.JPG", "RVT326_2.jpg", "RVT327_1.jpg", "RVT328_1.JPG", "RVT329.jpg", "RVT330_1.jpg", "RVT331_1.jpg", "RVT332_1.jpg", "RVT333_1.jpg", "RVT334_1.jpg", "RVT335_1.jpg", "RVT336_1.jpg", "RVT337_1.jpg", "RVT338_1.jpg", "RVT339_1.jpg", "V3061_1.jpg", "V3077_1.jpg", "V3078_1.jpg", "V3086.jpg", "V-3088.jpg", "V3090.jpg", "V3094_1.jpg", "V3095.jpg", "V3096.jpg", "V3097_1.jpg", "V3100.jpg", "V3104.jpg", "V3105.jpg", "V3106.jpg", "V3107.jpg", "V3110.jpg", "V3111_1.jpg", "V-3112ｸﾞﾚｰｼﾞｭ.JPG", "V3116_1.jpg", "V-3116_2.jpg", "V3118.jpg", "V-3118_1_名山.jpg", "V-3118_2_名山.jpg", "V-3119.jpg", "V-3120.jpg", "FK0149_1.jpg", "FK0450_1.jpg", "RVT302_1.jpg", "RVT303_1.jpg", "RVT304_1.jpg", "RVT308_1.jpg", "RVT308_2.jpg", "RVT310_1.jpg"] }
     };
 
-    function buildGallery() {
-        Object.keys(costumeData).forEach(catKey => {
-            const cat = costumeData[catKey];
-            const gridEl = document.getElementById(cat.grid);
-            if (!gridEl) return;
-
-            cat.files.forEach(file => {
-                const info = getCostumeInfo(file, catKey);
-                const item = document.createElement('div');
-                item.className = 'dress-item';
-                const path = `images/${cat.folder}/${file}`;
-
-                item.innerHTML = `
-                    <div class="img-box">
-                        <a href="${path}" class="zoom">
-                            <img src="${path}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'">
+    function generateGrids() {
+        Object.keys(data).forEach(key => {
+            const category = data[key];
+            const grid = document.getElementById(category.gridId);
+            if (!grid) return;
+            const groups = {};
+            category.files.forEach(file => {
+                const info = getInfo(file, key);
+                const groupKey = `${info.brand}-${info.baseID}`;
+                if (!groups[groupKey]) groups[groupKey] = { info, files: [] };
+                groups[groupKey].files.push(file);
+            });
+            const sortedGroups = Object.values(groups).sort((a, b) => a.info.priceValue - b.info.priceValue);
+            sortedGroups.forEach(group => {
+                const info = group.info;
+                const galleryId = `gallery-${info.baseID.replace(/[^a-zA-Z0-9]/g, '')}`;
+                const div = document.createElement('div');
+                div.className = 'dress-item';
+                const mainFile = group.files[0];
+                div.innerHTML = `
+                    ${group.files.length > 1 ? `<div class="photo-count">${group.files.length} Photos</div>` : ""}
+                    <div class="main-photo-wrapper">
+                        <a href="images/${category.folder}/${mainFile}" class="zoom" data-luminous-group="${galleryId}">
+                            <img src="images/${category.folder}/${mainFile}" class="main-img" alt="${info.displayName}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'; console.log('Missing: ${mainFile}')">
                         </a>
                     </div>
+                    <div class="thumb-container">
+                        ${group.files.length > 1 ? group.files.map(f => `
+                            <a href="images/${category.folder}/${f}" class="thumb-item zoom" data-luminous-group="${galleryId}">
+                                <img src="images/${category.folder}/${f}" onerror="this.style.display='none'">
+                            </a>`).join('') : ''}
+                    </div>
                     <div class="dress-info">
-                        <div class="brand">${info.brand}</div>
-                        <div class="id">${info.id}</div>
-                        <div class="price">${info.price}</div>
+                        <div class="brand-name">${info.brand}</div>
+                        <div class="dress-id">${info.displayName}</div>
+                        <div class="dress-price">${info.priceText}</div>
                     </div>
                 `;
-                gridEl.appendChild(item);
+                grid.appendChild(div);
             });
         });
-        // 拡大機能（ライトボックス）を起動 [cite: 4]
-        new LuminousGallery(document.querySelectorAll('.zoom'));
+        initLuminous();
     }
 
-    window.onload = buildGallery;
+    function initLuminous() {
+        new LuminousGallery(document.querySelectorAll('.zoom'), {}, {
+            arrowNavigation: true,
+            onOpen: () => {
+                const lightbox = document.querySelector('.lum-lightbox');
+                if (lightbox) {
+                    lightbox.addEventListener('click', (e) => {
+                        if (e.target === lightbox || e.target.classList.contains('lum-lightbox-inner')) {
+                            document.querySelector('.lum-close').click();
+                        }
+                    });
+                }
+            }
+        });
+    }
+    document.addEventListener('DOMContentLoaded', generateGrids);
 </script>
 </body>
 </html>

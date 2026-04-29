@@ -8,25 +8,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.4.0/luminous-basic.min.css">
     <style>
         :root { --gold: #b5a47e; --bg: #fdfdfb; --price-color: #a67c00; --brand-color: #888; }
-        body { font-family: 'Noto Serif JP', serif; background-color: var(--bg); color: #333; margin: 0; padding-bottom: 50px; }
+        body { font-family: 'Noto Serif JP', serif; background-color: var(--bg); color: #333; margin: 0; padding-bottom: 50px; scroll-behavior: smooth; }
         
-        header { text-align: center; padding: 50px 20px 30px; background: #fff; }
+        header { text-align: center; padding: 50px 20px 30px; background: #fff; border-bottom: 1px solid #f0f0f0; }
         header h1 { letter-spacing: 0.25em; font-weight: 300; font-size: 1.6rem; margin: 0; line-height: 1.5; }
         
         /* タブメニューのデザイン */
-        .nav-menu { position: sticky; top: 0; background: rgba(255,255,255,0.95); padding: 15px; text-align: center; z-index: 100; border-bottom: 1px solid #eee; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-        .nav-menu button { background: #fff; cursor: pointer; color: #666; font-size: 0.8rem; border: 1px solid #ccc; padding: 8px 20px; border-radius: 20px; transition: 0.3s; font-family: inherit; letter-spacing: 0.05em; }
+        .nav-menu { position: sticky; top: 0; background: rgba(255,255,255,0.98); padding: 15px; text-align: center; z-index: 100; border-bottom: 1px solid #eee; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .nav-menu button { background: #fff; cursor: pointer; color: #666; font-size: 0.8rem; border: 1px solid #ccc; padding: 8px 20px; border-radius: 20px; transition: 0.3s; font-family: inherit; letter-spacing: 0.05em; outline: none;}
         .nav-menu button:hover { border-color: var(--gold); }
-        
-        /* 選択されているタブのデザイン */
-        .nav-menu button.active { background: var(--gold); color: #fff; border-color: var(--gold); }
+        .nav-menu button.active { background: var(--gold); color: #fff; border-color: var(--gold); font-weight: 600;}
         
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; min-height: 600px; }
         
-        /* カテゴリセクションの表示・非表示コントロール */
-        .category-section { display: none; margin-top: 30px; animation: fadeIn 0.5s ease; }
+        /* タブ切り替え用：最初は非表示にしておく */
+        .category-section { display: none; margin-top: 30px; animation: fadeIn 0.4s ease; }
         .category-section.active { display: block; }
-        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -34,9 +31,9 @@
 
         .category-title { font-size: 1.6rem; border-left: 5px solid var(--gold); padding-left: 15px; margin-bottom: 30px; font-weight: 600; letter-spacing: 0.1em; color: #444; }
         
-        /* 衣装グリッドと画像のがたつき防止設定 */
+        /* 衣装グリッド・画像のガタつき防止 */
         .dress-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
-        .dress-item { background: #fff; padding: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; border-radius: 2px; position: relative; display: flex; flex-direction: column; }
+        .dress-item { background: #fff; padding: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; border-radius: 4px; position: relative; display: flex; flex-direction: column; }
         .dress-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         
         .photo-count { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; pointer-events: none; z-index: 10; }
@@ -83,26 +80,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.4.0/Luminous.min.js"></script>
 
 <script>
-    // ▼▼▼ タブ切り替えの機能 ▼▼▼
+    // タブ切り替えスクリプト
     document.querySelectorAll('.tab-btn').forEach(button => {
         button.addEventListener('click', function() {
-            // 全てのボタンからactiveを外す
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            // クリックされたボタンにactiveを付ける
             this.classList.add('active');
             
-            // 全てのセクションを非表示にする
             document.querySelectorAll('.category-section').forEach(sec => sec.classList.remove('active'));
-            // 対応するセクションを表示する
             const targetId = this.getAttribute('data-target');
             document.getElementById(targetId).classList.add('active');
             
-            // 切り替えたら一番上までスムーズにスクロールする
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
-    // ▲▲▲ タブ切り替えの機能 ここまで ▲▲▲
-
 
     function getInfo(filename, categoryKey) {
         const originalName = filename.toUpperCase();
@@ -173,6 +163,7 @@
         return { brand, displayName: baseID, priceText, priceValue, baseID };
     }
 
+    // 重複を削除し、正しく整理したデータ一覧
     const data = {
         plan: { folder: "plan", gridId: "plan-grid", files: ["29.白無垢②.jpg", "30.新大和白.jpg", "31.新大和黒.jpg", "32.DLC88①.jpg", "33.DLC88②.jpg", "01.RV72①.jpg", "02.RV72②.jpg", "03.RV14①.jpg", "04.RV14②.jpg", "05.RV71①.jpg", "06.RV71②.jpg", "07.DL95①.jpg", "08.DL95②.jpg", "09.DL93①.jpg", "10.DL93②.jpg", "11.V2142①.jpg", "12.V2142②.jpg", "13.V2157①.jpg", "14.V2157②.jpg", "15.V2135①.jpg", "16.V2135②.jpg", "17.DLC89①.jpg", "18.DLC89②.jpg", "19.DLC90①.jpg", "20.DLC90②.jpg", "21.RVT304.jpg", "22.RVT323.jpg", "23.RVT310.jpg", "24.RVT325.jpg", "25.RVT331.jpg", "26.K43.jpg", "27.K85.jpg", "28.K30.jpg"] },
         wedding: { folder: "wedding", gridId: "wedding-grid", files: ["ANTONIO RIVA_Sibilla_1.jpg", "ANTONIO RIVA_Sibilla_2.jpg", "ANTONIO RIVA_SISSI_1.jpg", "ANTONIO RIVA_SISSI_2.jpg", "ANTONIORIVA ADELAIDE 1.jpg", "ANTONIORIVA ADELAIDE 2.jpg", "ANTONIORIVA_CRISTINA_1.jpg", "ANTONIORIVA_CRISTINA_2.jpg", "ANTONIORIVA_LUCIA_1.jpg", "ANTONIORIVA_LUCIA_2.jpg", "DL079_1.jpg", "DL079_2.jpg", "DL084_1.jpg", "DL084_2.jpg", "DL086_1.jpg", "DL086_2.jpg", "DL-093_1.jpg", "DL-093_2.jpg", "DL094_1.jpg", "DL094_2.jpg", "DL095_1.jpg", "DL095_2.jpg", "DL095_3.jpg", "DL095_4.jpg", "DL095_5.jpg", "DL096_2.jpg", "DL096_3.jpg", "DL098_1.jpg", "DL098_2.jpg", "DL099_1.jpg", "DL099_2.jpg", "DL099_3.jpg", "DL099_4.jpg", "DL100.jpg", "DL100_1.jpg", "DL100_2.jpg", "DL101_1.jpg", "DL101_2.jpg", "DL102_1.jpg", "DL102_2.jpg", "DL103_1.jpg", "DL103_2.jpg", "DL103_3.jpg", "DL103_4.jpg", "DL-104_1_全.jpg", "DL-104_2_全.jpg", "DL-104_3_全.jpg", "DL105_1.jpg", "DL105_b.jpg", "DL105_o.jpg", "DL-106_1.jpg", "DL-106_2.jpg", "DL-106_3.jpg", "DL-106_b.jpg", "E0557_1.jpg", "E0557_2.jpg", "E0611_1.jpg", "E0650_1.jpg", "E0650_2.jpg", "EN1004_1.jpg", "EN1004_2.jpg", "EN1005_1.jpg", "EN1005_2.jpg", "EN1008_1.jpg", "EN1008_2.jpg", "EN1010_1.jpg", "EN1010_2.jpg", "EN1012_1.jpg", "EN1012_2.jpg", "EN1015_1.jpg", "EN1015_2.jpg", "EN1016_1.jpg", "EN1016_2.jpg", "EN1017_1.jpg", "EN1017_2.jpg", "EN1018_1.jpg", "EN1018_2.jpg", "EN1018_3.jpg", "EN1018_4.jpg", "GENOISE.jpg", "JILL0222_1.jpg", "JILL0231_OffWhite_1.jpg", "JILL0231_OffWhite_2.jpg", "JILL0231_OffWhite_image.jpg", "JILL0243_OffWhite_1.jpg", "JILL0243_OffWhite_2.jpg", "JILL0243_OffWhite_3.jpg", "JILL0255_1.jpg", "JILL0255_2.jpg", "JILL0257_1.jpg", "JILL0257_2.jpg", "JILL0271_OffWhite_1.jpg", "JILL0271_OffWhite_2.jpg", "JILL0271_OffWhite_3.jpg", "JILL0271_OffWhite_4.jpg", "JILL0273_OffWhite_1.jpg", "JILL0273_OffWhite_2.jpg", "JILL0273_OffWhite_3.jpg", "JILL-0297_1.JPG", "JILL-0297_2.JPG", "JILL-0297_3.JPG", "JILL0303_OffWhite_1.jpg", "JILL0303_OffWhite_2.jpg", "JILL0303_OffWhite_3.jpg", "JILL0307_1.jpg", "JILL0307_2.jpg", "JILL0307_3.jpg", "JILL0314_1.jpg", "JILL0314_2.jpg", "JILL0314_3.jpg", "JILL0326_1.jpg", "JILL0326_2.jpg", "JILL0326_3.jpg", "JILL0359_1.jpg", "JILL0359_2.jpg", "KF112_1.jpg", "KF112_2.jpg", "KF141_1.jpg", "KF141_2.jpg", "KF6203_1.jpg", "KF6203_2.jpg", "OPブラウス⑧_1.jpg", "OPブラウス⑧_2.jpg", "R1001_1.jpg", "R1001_2.jpg", "RA1001_1.jpg", "RA1001_2.jpg", "RA1004_1.jpg", "RA1004_2.jpg", "RV014_4.jpg", "RV014_5.jpg", "RV016_4.jpg", "RV016_5.jpg", "RV044.jpg", "RV056_1.jpg", "RV056_2.jpg", "RV056_3.jpg", "RV058_1.jpg", "RV058＿2.jpg", "RV058＿3.jpg", "RV059_1.jpg", "RV059_2.jpg", "RV060_1.jpg", "RV060_2.jpg", "RV060_3.jpg", "RV066_1.jpg", "RV066_2.jpg", "RV067_1.jpg", "RV067_2.jpg", "RV069_1.jpg", "RV069_2.jpg", "RV070_1.jpg", "RV070_2.jpg", "RV071_1.jpg", "RV071_2.jpg", "RV072_1.jpg", "RV072_2.jpg", "RV072_3.jpg", "RV073_1.jpg", "RV074_1.jpg", "RV074_2.jpg", "RV074_3.jpg", "RV074_4.jpg", "RV075_1.jpg", "RV075_2.jpg", "RV075_3.jpg", "RV076_1.jpg", "RV076_2.jpg", "RV076_3.jpg", "RV076_4.jpg", "RV076_5.jpg", "RV076_6.jpg", "RV078_1.jpg", "RV078_2.jpg", "RV078_3.jpg", "RV078_4.jpg", "RV078_5.jpg", "RV078_6.jpg", "RV079_1.jpg", "RV079_2.jpg", "RV079_3.jpg", "RV079_4.jpg", "RV079_5.jpg", "RV080_1.jpg", "RV080_2.jpg", "RV080_3.jpg", "RV080_4.jpg", "RV081_1.jpg", "RV081_2.jpg", "RV081_3.jpg", "RV081_4.jpg", "RV082_1.jpg", "RV082_2.jpg", "RV082_3.jpg", "RV083_1.jpg", "RV083_2.jpg", "RV083_3.jpg", "RV083_4.jpg", "RV084_1.jpg", "RV084_2.jpg", "RV084_3.jpg", "RV084_4.jpg", "RV086_1.jpg", "RV086_2.jpg", "RV086_3.jpg", "RV086_4.jpg", "RV087_1.jpg", "RV087_2.jpg", "RV087_3.jpg", "RV088_1.jpg", "RV088_2.jpg", "RV088_3.jpg", "RV089_1.jpg", "RV089_2.jpg", "RV090_1.jpg", "RV090_2.jpg", "RV090_3.jpg", "RV090_4.jpg", "RV090_5.jpg", "RV090_6.jpg", "RV091_1.jpg", "RV091_2.jpg", "RV091_3.jpg", "RV091_4.jpg", "RV091_5.jpg", "RV092_1.jpg", "RV092_2.jpg", "RV092_3.jpg", "RV093_1.jpg", "RV093_2.jpg", "RV093_3.jpg", "RV094_1.jpg", "RV094_2.jpg", "RV094_3.jpg", "RV094_4.jpg", "RV094_5.jpg", "RV094_6.jpg", "RV-095_1_全.jpg", "RV-095_2_全.jpg", "RV-096_1_全.jpg", "RV-096_2_全.jpg", "RV-096_3_全.jpg", "RV-097_1_全.jpg", "RV-097_2_全.jpg", "RV-097_3_全.jpg", "RV-097_4_全.jpg", "RV-098_1_全.jpg", "RV-098_2_全.jpg", "RV-098_3_全.jpg", "RV-098_4_全.jpg", "RV-098_5_全.jpg", "RV-099_1_全.jpg", "RV-099_2_全.jpg", "RV-099_3_全.jpg", "RV-100_1_全.jpg", "RV-100_2_全.jpg", "RV-101_1.jpg", "RV-101_2.jpg", "RV-101_bS.jpg", "RV-102_1.jpg", "RV-102_b.jpg", "RV-103_1.jpg", "RV-103_b.jpg", "RV-104_1.jpg", "RV-104_2.jpg", "RV-104_b.jpg", "RV-104_b1.jpg", "RV-104_b2.jpg", "V1114 _2.jpg", "V1114_1.jpg", "V1118_1.jpg", "V1118_2.jpg", "V1125_1.jpg", "V1125_2.jpg", "V1132_1.jpg", "V1132_2.jpg", "V1133_1.jpg", "V1133_2.jpg", "V1135_1.jpg", "V1135_2.jpg", "V-1136_1.jpg", "V-1136_2.jpg", "V-1136_3.jpg", "V-1137_1.jpg", "V-1137_2.jpg", "V-1138_1.jpg", "V-1138_2.jpg", "V1139_1.jpg", "V1139_2.jpg", "V1140_1.jpg", "V1140_2.jpg", "V1141_1.jpg", "V1141_2.jpg", "V1141_3.jpg", "V1142_1.jpg", "V1142_2.jpg", "V1143_1.jpg", "V1143_2.jpg", "V1144_1.jpg", "V1144_2.JPG", "V1145.jpg", "V-1146_1_名.jpg", "V-1146_2_名.jpg", "V-1148_1_名.jpg", "V-1148_2_名.jpg", "V-1148_3_名.jpg", "V-1151_1.jpg", "V-1151_2.jpg", "V1152_1.jpg", "V1152_2.jpg", "V1152_3.jpg", "V-1153.jpg", "ANTONIO RIVA SOPHIA_1.jpg", "ANTONIO RIVA SOPHIA_2.jpg", "ANTONIO RIVA Ursula_1.jpg", "ANTONIO RIVA Ursula_2.jpg"] },

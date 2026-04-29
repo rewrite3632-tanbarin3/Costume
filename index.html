@@ -8,48 +8,65 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.4.0/luminous-basic.min.css">
     <style>
         :root { --gold: #b5a47e; --bg: #fdfdfb; --price-color: #a67c00; --brand-color: #888; }
-        body { font-family: 'Noto Serif JP', serif; background-color: var(--bg); color: #333; margin: 0; padding-bottom: 50px; scroll-behavior: smooth; }
-        header { text-align: center; padding: 50px 20px; background: #fff; border-bottom: 1px solid #f0f0f0; }
-        header h1 { letter-spacing: 0.25em; font-weight: 300; font-size: 1.6rem; margin: 0; line-height: 1.5; }
+        body { font-family: 'Noto Serif JP', serif; background-color: var(--bg); color: #333; margin: 0; padding-bottom: 50px; }
         
-        /* ナビゲーション */
-        .nav-menu { position: sticky; top: 0; background: rgba(255,255,255,0.95); padding: 15px; text-align: center; z-index: 100; border-bottom: 1px solid #eee; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .nav-menu a { text-decoration: none; color: #666; font-size: 0.8rem; border: 1px solid #ccc; padding: 6px 15px; border-radius: 20px; transition: 0.3s; }
-        .nav-menu a:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
-        
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        .category-section { margin-top: 60px; }
-        .category-title { font-size: 1.6rem; border-left: 5px solid var(--gold); padding-left: 15px; margin-bottom: 30px; font-weight: 600; letter-spacing: 0.1em; color: #444; }
-        
-        /* グリッドレイアウト */
-        .dress-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-        .dress-item { background: #fff; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; border-radius: 4px; position: relative; }
-        .dress-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        
-        .photo-count { position: absolute; top: 25px; right: 25px; background: rgba(0,0,0,0.6); color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; z-index: 5; }
-        
-        .main-img { width: 100%; height: auto; aspect-ratio: 3/4; object-fit: cover; border-radius: 2px; cursor: zoom-in; }
-        
-        /* サムネイル */
-        .thumb-container { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 12px; min-height: 50px; }
-        .thumb-item { width: 45px; height: 60px; cursor: pointer; border: 1px solid #eee; overflow: hidden; }
-        .thumb-item img { width: 100%; height: 100%; object-fit: cover; }
-        .thumb-item:hover { border-color: var(--gold); opacity: 0.8; }
+        header { text-align: center; padding: 40px 20px; background: #fff; }
+        header h1 { letter-spacing: 0.25em; font-weight: 300; font-size: 1.5rem; margin: 0; }
 
-        .dress-info { padding-top: 15px; border-top: 1px solid #f0f0f0; margin-top: 10px; }
-        .brand-name { font-size: 0.7rem; color: var(--brand-color); margin-bottom: 4px; }
-        .dress-id { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
-        .dress-price { color: var(--price-color); font-weight: 600; font-size: 0.95rem; }
+        .nav-menu { position: sticky; top: 0; background: rgba(255,255,255,0.98); padding: 12px; text-align: center; z-index: 1000; border-bottom: 1px solid #eee; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        .nav-menu a { text-decoration: none; color: #666; font-size: 0.75rem; border: 1px solid #ccc; padding: 5px 12px; border-radius: 20px; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .category-title { font-size: 1.4rem; border-left: 4px solid var(--gold); padding-left: 12px; margin: 40px 0 20px; letter-spacing: 0.1em; }
+
+        /* チカチカ防止策：グリッドと画像の高さを固定 */
+        .dress-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            gap: 20px; 
+            min-height: 200px; /* 親要素の崩れ防止 */
+        }
+
+        .dress-item { 
+            background: #fff; 
+            padding: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* 画像エリアのサイズを事前に確定させる */
+        .img-box {
+            width: 100%;
+            aspect-ratio: 3 / 4; /* 3:4の比率を維持 */
+            background-color: #f0f0f0; /* 読み込み前のグレー枠 */
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            cursor: zoom-in;
+            transition: opacity 0.2s;
+        }
+
+        .dress-info { text-align: center; font-size: 0.8rem; }
+        .brand { color: var(--brand-color); font-size: 0.65rem; margin-bottom: 2px; }
+        .id { font-weight: 600; margin-bottom: 4px; }
+        .price { color: var(--price-color); font-weight: 600; }
 
         @media (max-width: 600px) {
-            .dress-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            header h1 { font-size: 1.2rem; }
+            .dress-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            header h1 { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
-<header><h1>PHOTO WEDDING<br>COSTUME COLLECTION</h1></header>
+<header><h1>PHOTO WEDDING COSTUME</h1></header>
 
 <nav class="nav-menu">
     <a href="#plan">PLAN-IN</a>
@@ -59,95 +76,83 @@
 </nav>
 
 <div class="container">
-    <section id="plan" class="category-section"><h2 class="category-title">Plan-inclusive</h2><div id="plan-grid" class="dress-grid"></div></section>
-    <section id="wedding" class="category-section"><h2 class="category-title">Wedding Dress</h2><div id="wedding-grid" class="dress-grid"></div></section>
-    <section id="color" class="category-section"><h2 class="category-title">Color Dress</h2><div id="color-grid" class="dress-grid"></div></section>
-    <section id="tuxedo" class="category-section"><h2 class="category-title">Tuxedo</h2><div id="tuxedo-grid" class="dress-grid"></div></section>
+    <section id="plan"><h2 class="category-title">Plan-inclusive</h2><div id="plan-grid" class="dress-grid"></div></section>
+    <section id="wedding"><h2 class="category-title">Wedding Dress</h2><div id="wedding-grid" class="dress-grid"></div></section>
+    <section id="color"><h2 class="category-title">Color Dress</h2><div id="color-grid" class="dress-grid"></div></section>
+    <section id="tuxedo"><h2 class="category-title">Tuxedo</h2><div id="tuxedo-grid" class="dress-grid"></div></section>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.4.0/Luminous.min.js"></script>
 
 <script>
-    // 品番判定ロジック
-    function getInfo(filename, categoryKey) {
-        const originalName = filename.toUpperCase();
-        let cleanName = filename.replace(/＿/g, "_").replace(/\.[^/.]+$/, "").trim();
-        let baseID = cleanName.replace(/^\d+\./, ""); 
-        baseID = baseID.replace(/ANTONIO\s*RIVA|ANTONIORIVA|JILL\s*STUART/gi, "")
-                       .replace(/(_OffWhite|_image|_bluegreen|_orange|_Pink|sideback|着脱|ベージュ|★|◎)/gi, "")
-                       .replace(/[①-⑨]/g, "").replace(/[山名]/g, "").trim();
-
-        const upperBase = baseID.toUpperCase().replace(/-/g, "");
+    // 判定ロジック（ブランド・価格）
+    function getCostumeInfo(file, cat) {
+        const name = file.toUpperCase();
+        let id = file.split('.')[1] || file.split('.')[0];
+        id = id.replace(/\.(jpg|png|jpeg)/i, "").replace(/①|②|_1|_2/g, "").trim();
+        
         let brand = "VIVIAN";
-        let priceValue = 44000;
+        let price = "+ ¥44,000";
 
-        // ブランド・価格判定 [cite: 7, 14, 15, 25]
-        if (originalName.match(/SOPHIA|URSULA|SIBILLA|SISSI|ADELAIDE|CRISTINA|LUCIA/)) {
-            brand = "ANTONIO RIVA"; priceValue = 220000; [cite: 35]
-        } else if (upperBase.match(/^(EN|E0|KF|GENOISE)/)) {
-            brand = "IMPORT SELECTION"; priceValue = 132000; [cite: 17, 26]
-        } else if (upperBase.match(/^(KH|ST)/) || upperBase === "V2192") {
-            brand = "KIYOKO HATA"; priceValue = 88000; [cite: 14]
-        } else if (upperBase.match(/^(V1125|V1140|V1141|V1151|V2176|V2182|V2239|V2225|V2157)/)) {
-            brand = "ISAMU MORITA"; priceValue = 66000; [cite: 19, 25]
-        } else if (upperBase.startsWith("JILL")) {
-            brand = "JILL STUART"; priceValue = 66000; [cite: 11, 15]
-        } else if (upperBase.startsWith("ANT") || upperBase.startsWith("LA")) {
-            brand = upperBase.startsWith("ANT") ? "ANTEPRIMA" : "LAURA ASHLEY"; priceValue = 66000; [cite: 20, 27]
-        } else if (upperBase.startsWith("RV") && !upperBase.startsWith("RVT")) {
-            brand = "Royal VIVIAN"; priceValue = 88000; [cite: 31, 33]
-        } else if (upperBase.startsWith("DL")) {
-            brand = "Dolce VIVIAN"; priceValue = 44000; [cite: 30, 36]
+        if (name.includes("ANTONIO") || name.match(/SIBILLA|SISSI|ADELAIDE|CRISTINA|LUCIA/)) { 
+            brand = "ANTONIO RIVA"; price = "+ ¥220,000"; [cite: 11, 35]
+        } else if (name.match(/EN|E0|KF|GENOISE/)) { 
+            brand = "IMPORT SELECTION"; price = "+ ¥132,000"; [cite: 7, 17, 25, 26]
+        } else if (name.includes("KH") || name.includes("ST") || name.includes("V2192")) { 
+            brand = "KIYOKO HATA"; price = "+ ¥88,000"; [cite: 7, 14, 25]
+        } else if (name.match(/V1125|V1140|V1141|V1151|V2176|V2182|V2239|V2225|V2157/)) { 
+            brand = "ISAMU MORITA"; price = "+ ¥66,000"; [cite: 7, 19, 25]
+        } else if (name.includes("JILL")) { 
+            brand = "JILL STUART"; price = "+ ¥66,000"; [cite: 11, 15, 25]
+        } else if (name.includes("DL") || name.includes("DLC")) { 
+            brand = "Dolce VIVIAN"; price = (cat === 'plan') ? "プラン内 ¥0" : "+ ¥44,000"; [cite: 8, 10, 18, 25, 30]
+        } else if (name.includes("RV")) { 
+            brand = "Royal VIVIAN"; price = (cat === 'plan') ? "プラン内 ¥0" : "+ ¥88,000"; [cite: 10, 25, 29, 31, 36]
         }
-
-        let priceText = `+ ¥${priceValue.toLocaleString()}`;
-        if (categoryKey === 'plan') {
-            priceText = "プラン内 ¥0";
-            priceValue = 0; // ソート用
-        }
-        return { brand, displayName: baseID, priceText, priceValue };
+        
+        if (cat === 'plan') price = "プラン内 ¥0"; [cite: 10, 18]
+        return { brand, id, price };
     }
 
-    const data = {
-        plan: { folder: "プラン内", gridId: "plan-grid", files: ["29.白無垢②.jpg", "30.新大和白.jpg", "31.新大和黒.jpg", "32.DLC88①.jpg", "33.DLC88②.jpg", "01.RV72①.jpg", "03.RV14①.jpg", "05.RV71①.jpg", "07.DL95①.jpg", "09.DL93①.jpg", "11.V2142①.jpg", "13.V2157①.jpg", "15.V2135①.jpg", "17.DLC89①.jpg", "19.DLC90①.jpg", "21.RVT304.jpg", "22.RVT323.jpg", "23.RVT310.jpg", "24.RVT325.jpg", "25.RVT331.jpg", "26.K43.jpg", "27.K85.jpg", "28.K30.jpg"] }, [cite: 6, 9, 12, 18]
-        wedding: { folder: "ウエディングドレス", gridId: "wedding-grid", files: ["ANTONIO RIVA_Sibilla_1.jpg", "ANTONIO RIVA_SISSI_1.jpg", "ANTONIORIVA ADELAIDE 1.jpg", "DL079_1.jpg", "DL084_1.jpg", "E0557_1.jpg", "EN1005_1.jpg", "JILL0359_1.jpg", "KF112_1.jpg", "RV081_1.jpg", "V1125_1.jpg", "V1152_1.jpg"] }, [cite: 11, 13, 17, 30, 31, 35, 36]
-        color: { folder: "カラードレス", gridId: "color-grid", files: ["ANT0163_2.jpg", "ANT0254_1.jpg", "DLC084_1.jpg", "JILL0183_1.jpg", "KF135_1.jpg", "KH-0503Re_1.jpg", "V2213_1.jpg"] }, [cite: 11, 16, 21, 22, 27]
-        tuxedo: { folder: "タキシード", gridId: "tuxedo-grid", files: ["RVT311_1.jpg", "V3078_1.jpg", "V3107.jpg", "FK0149_1.jpg"] } [cite: 10, 24, 29]
+    const costumeData = {
+        plan: { folder: "プラン内", grid: "plan-grid", files: ["29.白無垢②.jpg", "30.新大和白.jpg", "31.新大和黒.jpg", "32.DLC88①.jpg", "01.RV72①.jpg", "11.V2142①.jpg", "26.K43.jpg"] },
+        wedding: { folder: "ウエディングドレス", grid: "wedding-grid", files: ["ANTONIO RIVA_Sibilla_1.jpg", "EN1005_1.jpg", "JILL0359_1.jpg", "KF112_1.jpg", "RV081_1.jpg", "V1125_1.jpg"] },
+        color: { folder: "カラードレス", grid: "color-grid", files: ["ANT0163_2.jpg", "JILL0183_1.jpg", "KH-0503Re_1.jpg", "V2213_1.jpg"] },
+        tuxedo: { folder: "タキシード", grid: "tuxedo-grid", files: ["RVT311_1.jpg", "V3078_1.jpg", "FK0149_1.jpg"] }
     };
 
-    function generateGrids() {
-        Object.keys(data).forEach(key => {
-            const category = data[key];
-            const grid = document.getElementById(category.gridId);
-            if (!grid) return;
+    function buildGallery() {
+        Object.keys(costumeData).forEach(catKey => {
+            const cat = costumeData[catKey];
+            const gridEl = document.getElementById(cat.grid);
+            if (!gridEl) return;
 
-            category.files.forEach(file => {
-                const info = getInfo(file, key);
-                const div = document.createElement('div');
-                div.className = 'dress-item';
-                const imgPath = `images/${category.folder}/${file}`;
+            cat.files.forEach(file => {
+                const info = getCostumeInfo(file, catKey);
+                const item = document.createElement('div');
+                item.className = 'dress-item';
+                const path = `images/${cat.folder}/${file}`;
 
-                div.innerHTML = `
-                    <div class="main-photo-wrapper">
-                        <a href="${imgPath}" class="zoom">
-                            <img src="${imgPath}" class="main-img" alt="${info.displayName}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'">
+                item.innerHTML = `
+                    <div class="img-box">
+                        <a href="${path}" class="zoom">
+                            <img src="${path}" loading="eager" onerror="this.parentElement.style.display='none'">
                         </a>
                     </div>
                     <div class="dress-info">
-                        <div class="brand-name">${info.brand}</div>
-                        <div class="dress-id">${info.displayName}</div>
-                        <div class="dress-price">${info.priceText}</div>
+                        <div class="brand">${info.brand}</div>
+                        <div class="id">${info.id}</div>
+                        <div class="price">${info.price}</div>
                     </div>
                 `;
-                grid.appendChild(div);
+                gridEl.appendChild(item);
             });
         });
-        
-        // 拡大機能の初期化
+        // 最後に一度だけ拡大機能を設定
         new LuminousGallery(document.querySelectorAll('.zoom'));
     }
 
-    document.addEventListener('DOMContentLoaded', generateGrids);
+    window.onload = buildGallery;
 </script>
 </body>
 </html>

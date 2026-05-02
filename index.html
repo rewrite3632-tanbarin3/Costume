@@ -308,10 +308,11 @@ script
         upperForBrand = baseID.replace(/-/g, "").toUpperCase(); 
         if (!isAccessory) displayName = baseID;
 
-        // 品番名の表示調整（KH577などをスッキリ見せる）
+        // 品番名の表示調整（表示をスッキリ見せる）
         if (displayName === "KH-0577" || displayName === "KH-0577_1") displayName = "KH577";
         if (displayName === "V-3106_1") displayName = "V-3106";
         if (displayName === "V-3118_1") displayName = "V-3118";
+        if (displayName === "V-3128_1") displayName = "V-3128";
 
         if (!isAccessory) {
             if (originalName.includes("OPブラウス") || originalName.includes("OPBLOUSE") || originalName.includes("OPﾌﾞﾗｳｽ")) {
@@ -356,16 +357,17 @@ script
                 brand = "VIVIAN";
             } else if (upperForBrand.match(/^(新大和黒|新大和白)$/)) {
                 brand = "紋付"; brandScore = 10;
+            // ----------------------------------------------------
+            // ここで和装のカテゴリ（色打掛・白無垢など）と並び順を定義
+            // ----------------------------------------------------
+            } else if (isIrouchikake || ["K080", "K081", "K099", "K30", "K43", "K122", "K85"].some(k => upperForBrand === k) || isUchikake) {
+                brand = "色打掛"; brandScore = 1; // 色打掛を一番上に表示
+            } else if (isShiromuku || ["K119", "K126", "K128", "K068"].includes(upperForBrand)) {
+                brand = "白無垢"; brandScore = 2; // 白無垢を二番目に表示
             } else if (isAkamuku) {
-                brand = "赤無垢"; brandScore = 5; displayName = "K-127";
-            } else if (["K122", "K85"].includes(upperForBrand) || isUchikake) {
-                brand = "打掛"; brandScore = 1;
-            } else if (["K080", "K081", "K099", "K30", "K43"].includes(upperForBrand) || isIrouchikake) {
-                brand = "色打掛"; brandScore = 2;
+                brand = "赤無垢"; brandScore = 3; displayName = "K127"; // 赤無垢を三番目に表示
             } else if (isHikifurisode) {
-                brand = "引振袖"; brandScore = 3;
-            } else if (["K119", "K126", "K128", "K068"].includes(upperForBrand) || isShiromuku) {
-                brand = "白無垢"; brandScore = 4;
+                brand = "引振袖"; brandScore = 4; // 引振袖を四番目に表示
             } else if (originalName.match(/SOPHIA|URSULA|SIBILLA|SISSI|ADELAIDE|CRISTINA|LUCIA|ANTONIO/)) {
                 brand = "ANTONIO RIVA"; priceValue = 220000;
             } else if (upperForBrand.match(/^(EN|E0|KF|R10|RA10|GENOISE)/)) {
@@ -394,7 +396,7 @@ script
             } else if (upperForBrand === "V1139") {
                 brand = "AMANTHA BRIDE"; priceValue = 44000;
             } else if (upperForBrand.match(/(白無垢|色無垢|引振袖|打掛|大和|K\d+|SD\d+)/)) {
-                brand = "TRADITIONAL";
+                brand = "TRADITIONAL"; brandScore = 5;
             }
         } // End of !isAccessory
 
@@ -403,10 +405,10 @@ script
             // 基本は+33,000円
             priceValue = 33000;
             
-            // 品番の数字部分だけを確実に抽出して比較する
+            // 品番の数字部分だけを確実に抽出して比較する（ゼロ埋めやハイフンを無視）
             const numMatch = upperForBrand.match(/K-?0*(\d+)/);
             if (numMatch) {
-                const kNumStr = parseInt(numMatch[1], 10).toString(); // "18", "66" などの文字列に統一
+                const kNumStr = parseInt(numMatch[1], 10).toString(); // 例: "18", "66"
                 
                 const price88k = ["18", "87", "95", "117"];
                 const price143k = ["31", "62"];
@@ -474,10 +476,14 @@ script
 >>>>>>> 6f68dda50b0c514da1bd2440ab0c9344f88356b9
         
 <<<<<<< HEAD
+<<<<<<< HEAD
         { gridId tuxedo-grid, categoryKey tuxedo, folder imagestuxedo, files [V-3106_1_GT,HK_3492.jpg, V-3118_1_NM_3587_2.jpg, V-3128_1_GT,HK_3285_2.jpg, RVT311_1.jpg, RVT313_1.jpg, RVT317_1.jpg, RVT320_1.jpg, RVT324_1.jpg, RVT326_1.jpg, RVT326_2.jpg, RVT327_1.jpg, RVT328_1.jpg, RVT329.jpg, RVT330_1.jpg, RVT332_1.jpg, RVT333_1.jpg, RVT334_1.jpg, RVT335_1.jpg, RVT336_1.jpg, RVT337_1.jpg, RVT338_1.jpg, RVT339_1.jpg, V3061_1.jpg, V3077_1.jpg, V3078_1.jpg, V3086.jpg, V-3088.jpg, V3090.jpg, V3094_1.jpg, V3095.jpg, V3096.jpg, V3097_1.jpg, V3100.jpg, V3104.jpg, V3105.jpg, V3106.jpg, V3107.jpg, V3110.jpg, V3111_1.jpg, V-3112ｸﾞﾚｰｼﾞｭ.jpg, V3116_1.jpg, V3116_2.jpg, V3118.jpg, V-3118_1_名山.jpg, V-3118_2_名山.jpg, V-3119.jpg, V-3120.jpg, FK0149_1.jpg, FK0450_1.jpg, RVT302_1.jpg, RVT303_1.jpg, RVT308_1.jpg] },
 =======
         { gridId: "tuxedo-grid", categoryKey: "tuxedo", folder: "images/tuxedo", files: ["V-3106_1.jpg", "V-3118_1.jpg", "V-3128_1_GT,HK_3285_2.jpg", "RVT311_1.jpg", "RVT313_1.jpg", "RVT317_1.jpg", "RVT320_1.jpg", "RVT324_1.jpg", "RVT326_1.jpg", "RVT326_2.jpg", "RVT327_1.jpg", "RVT328_1.jpg", "RVT329.jpg", "RVT330_1.jpg", "RVT332_1.jpg", "RVT333_1.jpg", "RVT334_1.jpg", "RVT335_1.jpg", "RVT336_1.jpg", "RVT337_1.jpg", "RVT338_1.jpg", "RVT339_1.jpg", "V3061_1.jpg", "V3077_1.jpg", "V3078_1.jpg", "V3086.jpg", "V-3088.jpg", "V3090.jpg", "V3094_1.jpg", "V3095.jpg", "V3096.jpg", "V3097_1.jpg", "V3100.jpg", "V3104.jpg", "V3105.jpg", "V3106.jpg", "V3107.jpg", "V3110.jpg", "V3111_1.jpg", "V-3112ｸﾞﾚｰｼﾞｭ.jpg", "V3116_1.jpg", "V3116_2.jpg", "V3118.jpg", "V-3119.jpg", "V-3120.jpg", "FK0149_1.jpg", "FK0450_1.jpg", "RVT302_1.jpg", "RVT303_1.jpg", "RVT308_1.jpg"] },
 >>>>>>> 224df3934797a0c2be6c59b12f6f922bc9b1efd1
+=======
+        { gridId: "tuxedo-grid", categoryKey: "tuxedo", folder: "images/tuxedo", files: ["V-3106_1_GT,HK_3492.jpg", "V-3118_1_NM_3587_2.jpg", "V-3128_1_GT,HK_3285_2.jpg", "RVT311_1.jpg", "RVT313_1.jpg", "RVT317_1.jpg", "RVT320_1.jpg", "RVT324_1.jpg", "RVT326_1.jpg", "RVT326_2.jpg", "RVT327_1.jpg", "RVT328_1.jpg", "RVT329.jpg", "RVT330_1.jpg", "RVT332_1.jpg", "RVT333_1.jpg", "RVT334_1.jpg", "RVT335_1.jpg", "RVT336_1.jpg", "RVT337_1.jpg", "RVT338_1.jpg", "RVT339_1.jpg", "V3061_1.jpg", "V3077_1.jpg", "V3078_1.jpg", "V3086.jpg", "V-3088.jpg", "V3090.jpg", "V3094_1.jpg", "V3095.jpg", "V3096.jpg", "V3097_1.jpg", "V3100.jpg", "V3104.jpg", "V3105.jpg", "V3106.jpg", "V3107.jpg", "V3110.jpg", "V3111_1.jpg", "V-3112ｸﾞﾚｰｼﾞｭ.jpg", "V3116_1.jpg", "V3116_2.jpg", "V3118.jpg", "V-3119.jpg", "V-3120.jpg", "FK0149_1.jpg", "FK0450_1.jpg", "RVT302_1.jpg", "RVT303_1.jpg", "RVT308_1.jpg"] },
+>>>>>>> 93dfa9fcdbb0015e4c874f44e9a8308602b28ba7
         
 <<<<<<< HEAD
         { gridId waso-grid, categoryKey waso, folder imageswasohikifurisode, files [引振袖K-111_2_商品部.jpg, 引振袖_K001_1.jpg, 引振袖_K002_1.jpg, 引振袖_K003_1.jpg, 引振袖_K004_1.jpg, 引振袖_K005_1.jpg, 引振袖_K007_1.jpg, 引振袖_K011.jpg, 引振袖_K017_1.jpg, 引振袖_K065_1.jpg, 引振袖_K070.jpg, 引振袖_K084_1.jpg, 引振袖_K112_商品部.jpg, 引振袖_SD2011_1.jpg, 引振袖K-111_1_商品部.jpg] },
@@ -519,16 +525,21 @@ script
             const groups = gridsData[gridId];
             
 <<<<<<< HEAD
+<<<<<<< HEAD
             const sortedGroups = Object.values(groups).sort((a, b) = {
 =======
             // 順番: 金額順 → ブランド名順 → アルファベット順
             const sortedGroups = Object.values(groups).sort((a, b) => {
                 // 1. 金額順
 >>>>>>> 6f68dda50b0c514da1bd2440ab0c9344f88356b9
+=======
+            // 順番: 和装などのカテゴリ順 → 金額順 → アルファベット順
+            const sortedGroups = Object.values(groups).sort((a, b) => {
+                // 1. カテゴリ/ブランドスコア順 (色打掛→白無垢→赤無垢→引振袖)
+                if (a.info.brandScore !== b.info.brandScore) return a.info.brandScore - b.info.brandScore;
+                // 2. 金額順
+>>>>>>> 93dfa9fcdbb0015e4c874f44e9a8308602b28ba7
                 if (a.info.priceValue !== b.info.priceValue) return a.info.priceValue - b.info.priceValue;
-                // 2. ブランド名順（アルファベット）
-                const brandCompare = a.info.brand.localeCompare(b.info.brand, 'ja');
-                if (brandCompare !== 0) return brandCompare;
                 // 3. アルファベット・品番順
                 return a.info.upperBase.localeCompare(b.info.upperBase, 'ja');
             });
@@ -540,10 +551,15 @@ script
                 div.className = 'dress-item';
                 
 <<<<<<< HEAD
+<<<<<<< HEAD
                  検索用にブランド名と衣装名をデータ属性に保存（大文字小文字を区別しないよう小文字化）
 =======
 >>>>>>> 6f68dda50b0c514da1bd2440ab0c9344f88356b9
                 div.dataset.search = `${info.brand} ${info.displayName}`.toLowerCase();
+=======
+                // ハイフンなしの文字列も検索用に含めることで、K018でもK-018でも検索ヒットするようにする
+                div.dataset.search = `${info.brand} ${info.displayName} ${info.upperBase}`.toLowerCase().replace(/-/g, '');
+>>>>>>> 93dfa9fcdbb0015e4c874f44e9a8308602b28ba7
                 
                 const mainPath = `${group.items[0].folder}${group.items[0].file}`;
                 let thumbHtml = '';
@@ -567,7 +583,8 @@ script
         if(!searchInput) return;
 
         searchInput.addEventListener('input', function(e) {
-            const term = e.target.value.toLowerCase().trim();
+            // 検索ワードからもハイフンを抜く
+            const term = e.target.value.toLowerCase().trim().replace(/-/g, '');
             const sections = document.querySelectorAll('.category-section');
             
             if (term === '') {

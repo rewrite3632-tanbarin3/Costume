@@ -362,14 +362,25 @@
             if (!grid) return;
             const groups = gridsData[gridId];
             
-            // 順番: 和装などのカテゴリ順 → 金額順 → アルファベット順
             const sortedGroups = Object.values(groups).sort((a, b) => {
-                // 1. カテゴリ/ブランドスコア順 (色打掛→白無垢→赤無垢→引振袖)
-                if (a.info.brandScore !== b.info.brandScore) return a.info.brandScore - b.info.brandScore;
-                // 2. 金額順
-                if (a.info.priceValue !== b.info.priceValue) return a.info.priceValue - b.info.priceValue;
-                // 3. アルファベット・品番順
-                return a.info.upperBase.localeCompare(b.info.upperBase, 'ja');
+                if (gridId === 'plan-grid') {
+                    // プラン内: 1. カテゴリ順(WD→CD→TX→和装→小物) 2. ブランド順 3. 品番(アルファベット)順
+                    if (a.info.brandScore !== b.info.brandScore) return a.info.brandScore - b.info.brandScore;
+                    const brandCompare = a.info.brand.localeCompare(b.info.brand, 'ja');
+                    if (brandCompare !== 0) return brandCompare;
+                    return a.info.upperBase.localeCompare(b.info.upperBase, 'ja');
+                } else if (gridId === 'waso-grid') {
+                    // 和装: 1. カテゴリ順(色打掛→白無垢→赤無垢→引振袖) 2. 金額順 3. 品番(アルファベット)順
+                    if (a.info.brandScore !== b.info.brandScore) return a.info.brandScore - b.info.brandScore;
+                    if (a.info.priceValue !== b.info.priceValue) return a.info.priceValue - b.info.priceValue;
+                    return a.info.upperBase.localeCompare(b.info.upperBase, 'ja');
+                } else {
+                    // WD, CD, TX: 1. 金額順 2. ブランド順 3. 品番(アルファベット)順
+                    if (a.info.priceValue !== b.info.priceValue) return a.info.priceValue - b.info.priceValue;
+                    const brandCompare = a.info.brand.localeCompare(b.info.brand, 'ja');
+                    if (brandCompare !== 0) return brandCompare;
+                    return a.info.upperBase.localeCompare(b.info.upperBase, 'ja');
+                }
             });
             
             sortedGroups.forEach(group => {

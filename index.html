@@ -297,15 +297,24 @@
         }
 
         let priceText = `+ ¥${priceValue.toLocaleString()}`;
+        
+        // プラン内タブの表示順（WD→CD→TX→和装→小物）を上書き設定
         if (categoryKey === 'plan') {
             priceText = "プラン内 ¥0";
-            let planOrderScore = 99;
-            if (isAccessory) { planOrderScore = 9; }
-            else if (upperForBrand.match(/^(RV|DL\d)/) && !upperForBrand.startsWith("RVT")) { planOrderScore = 1; } 
-            else if (upperForBrand.match(/^(V2|DLC|KH|ANT|LA|CB|OD|BB)/)) { planOrderScore = 2; } 
-            else if (upperForBrand.startsWith("RVT") || upperForBrand.startsWith("V3") || upperForBrand.startsWith("FK")) { planOrderScore = 3; } 
-            else { planOrderScore = 4; }
-            priceValue = planOrderScore; 
+            priceValue = 0; // 金額は一律0とする
+            
+            if (isAccessory) {
+                brandScore = 60; // 小物
+            } else if (upperForBrand.match(/^(RV1|RV7|DL9)/) && !upperForBrand.startsWith("RVT")) {
+                brandScore = 10; // WD
+            } else if (upperForBrand.match(/^(V21|DLC)/)) {
+                brandScore = 20; // CD
+            } else if (upperForBrand.startsWith("RVT")) {
+                brandScore = 30; // TX
+            } else {
+                // 和装 (色打掛は元々1、白無垢は2などのため、40を足して 41, 42... とする)
+                brandScore = 40 + (brandScore === 99 ? 5 : brandScore); 
+            }
         }
 
         return { brand, displayName: displayName, priceText, priceValue, upperBase: upperForBrand, brandScore };

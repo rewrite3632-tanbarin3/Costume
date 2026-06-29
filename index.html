@@ -118,6 +118,64 @@
         });
     });
 
+    // ============================================================
+    // ブランド／価格／表示順の判定ルール（上から順に最初の一致を採用）
+    // 新しいドレスはここに1行追加するだけでよい
+    //   match: (c) => 真偽   c = { u(品番), originalName, isIrouchikake, isUchikake, isShiromuku, isAkamuku, isHikifurisode }
+    //   apply: (s, c) => {}  s = { brand, priceValue, brandScore, displayName } を書き換える
+    // ============================================================
+    const BRAND_RULES = [
+        { match: c => c.originalName.includes("OPブラウス") || c.originalName.includes("OPBLOUSE") || c.originalName.includes("OPﾌﾞﾗｳｽ"),
+          apply: s => { s.brand = "OPTION"; s.priceValue = 11000; s.displayName = "OPブラウス"; } },
+        { match: c => c.u.match(/^(CB|OD|BB)/),
+          apply: s => { s.brand = "Canta Bella"; s.priceValue = 165000; } },
+        { match: c => ["V1145", "V1135", "V1136", "V1137", "V1138", "V1152"].includes(c.u),
+          apply: (s, c) => {
+              if (c.u === "V1138") s.brand = "ANNNA BLANCA";
+              else if (c.u === "V1152") s.brand = "Delafore";
+              else if (c.u === "V1145" || c.u === "V1135") s.brand = "LUXE";
+              else s.brand = "DEWY";
+              s.priceValue = 44000;
+          } },
+        { match: c => ["DL107", "DL108", "V2242", "V2250", "V2243", "V2244"].includes(c.u),
+          apply: (s, c) => { s.brand = c.u.startsWith("DL") ? "Dolce VIVIAN" : "VIVIAN"; s.priceValue = 44000; if (c.u === "V2244") s.brand = "SUN MODE WEDDING"; } },
+        { match: c => c.u === "V2249", apply: s => { s.brand = "Lulu felice"; s.priceValue = 66000; } },
+        { match: c => c.u === "V2198", apply: s => { s.brand = "Klosir"; } },
+        { match: c => c.u === "V2151" || c.u === "V2221", apply: s => { s.brand = "Ballerina"; } },
+        { match: c => c.u.startsWith("V2144") || c.u === "V2212", apply: s => { s.brand = "L'ATELIER MARIAGE"; } },
+        { match: c => c.u === "V2177", apply: s => { s.brand = "SPIRAL GIRL"; } },
+        { match: c => c.u === "V2178", apply: s => { s.brand = "NATURAL BEAUTY"; } },
+        { match: c => c.u === "V2173", apply: s => { s.brand = "HARDY AMIES"; } },
+        { match: c => c.u === "V2217" || c.u === "V2222", apply: s => { s.brand = "Brilliantayu"; } },
+        { match: c => c.u === "V2210", apply: s => { s.brand = "raffiller"; } },
+        { match: c => c.u === "V3086", apply: s => { s.brand = "LANVIN"; } },
+        { match: c => c.u === "V3119", apply: s => { s.brand = "Zelda"; } },
+        { match: c => c.u === "V2186", apply: s => { s.brand = "NICOLE"; } },
+        { match: c => c.u === "FK0149" || c.u === "FK0450", apply: s => { s.brand = "VIVIAN"; } },
+        { match: c => c.u.match(/^(新大和黒|新大和白)$/), apply: s => { s.brand = "紋付"; s.brandScore = 10; } },
+        { match: c => c.isIrouchikake || ["K080", "K081", "K099", "K30", "K43", "K122", "K85"].some(k => c.u === k) || c.isUchikake,
+          apply: s => { s.brand = "色打掛"; s.brandScore = 1; } },
+        { match: c => c.isShiromuku || ["K119", "K126", "K128", "K068"].includes(c.u),
+          apply: s => { s.brand = "白無垢"; s.brandScore = 2; } },
+        { match: c => c.isAkamuku, apply: s => { s.brand = "赤無垢"; s.brandScore = 3; s.displayName = "K-127"; } },
+        { match: c => c.isHikifurisode, apply: s => { s.brand = "引振袖"; s.brandScore = 4; } },
+        { match: c => c.originalName.match(/SOPHIA|URSULA|SIBILLA|SISSI|ADELAIDE|CRISTINA|LUCIA|ANTONIO/),
+          apply: s => { s.brand = "ANTONIO RIVA"; s.priceValue = 220000; } },
+        { match: c => c.u.match(/^(EN|E0|KF|R10|RA10|GENOISE)/), apply: s => { s.brand = "IMPORT SELECTION"; s.priceValue = 132000; } },
+        { match: c => c.u.match(/^KH/) || c.u === "V2192" || c.u === "KH577", apply: s => { s.brand = "KIYOKO HATA"; s.priceValue = 88000; } },
+        { match: c => c.u.match(/^ST/) || c.u.match(/^STB/), apply: s => { s.brand = "SACHIKO TSUTSUI"; s.priceValue = 88000; } },
+        { match: c => c.u.match(/^(V1125|V1140|V1141|V1151|V2176|V2182|V2239|V2225|V2157|V2255)/), apply: s => { s.brand = "ISAMU MORITA"; s.priceValue = 66000; } },
+        { match: c => c.u === "V2213" || c.u === "V2215", apply: s => { s.brand = "Lulu Felice"; s.priceValue = 66000; } },
+        { match: c => c.u.startsWith("JILL") || c.originalName.includes("JILL"), apply: s => { s.brand = "JILL STUART"; s.priceValue = 66000; } },
+        { match: c => c.u.startsWith("ANT"), apply: s => { s.brand = "ANTEPRIMA"; s.priceValue = 66000; } },
+        { match: c => c.u.startsWith("LA"), apply: s => { s.brand = "LAURA ASHLEY"; s.priceValue = 66000; } },
+        { match: c => c.u.startsWith("RV") && !c.u.startsWith("RVT") || ["RV105", "RV106", "RV107"].includes(c.u), apply: s => { s.brand = "Royal VIVIAN"; s.priceValue = 88000; } },
+        { match: c => c.u.startsWith("DL") || c.u.startsWith("DLC"), apply: s => { s.brand = "Dolce VIVIAN"; s.priceValue = 44000; } },
+        { match: c => c.u.startsWith("RVT") || c.u.startsWith("V3") || c.u.startsWith("FK"), apply: (s, c) => { s.brand = c.u.startsWith("RVT") ? "Royal VIVIAN" : "VIVIAN"; s.priceValue = 44000; } },
+        { match: c => c.u === "V1139", apply: s => { s.brand = "AMANTHA BRIDE"; s.priceValue = 44000; } },
+        { match: c => c.u.match(/(白無垢|色無垢|引振袖|打掛|大和|K\d+|SD\d+)/), apply: s => { s.brand = "TRADITIONAL"; s.brandScore = 5; } },
+    ];
+
     function getInfo(filename, categoryKey) {
         const originalName = filename.toUpperCase();
         let cleanName = filename.replace(/＿/g, "_").replace(/\.[^/.]+$/, "").trim();
@@ -224,89 +282,12 @@
         }
 
         if (!isAccessory) {
-            if (originalName.includes("OPブラウス") || originalName.includes("OPBLOUSE") || originalName.includes("OPﾌﾞﾗｳｽ")) {
-                brand = "OPTION"; priceValue = 11000;
-                displayName = "OPブラウス";
-            } else if (upperForBrand.match(/^(CB|OD|BB)/)) {
-                brand = "Canta Bella"; priceValue = 165000;
-            } else if (["V1145", "V1135", "V1136", "V1137", "V1138", "V1152"].includes(upperForBrand)) {
-                if (upperForBrand === "V1138") brand = "ANNNA BLANCA";
-                else if (upperForBrand === "V1152") brand = "Delafore";
-                else if (upperForBrand === "V1145" || upperForBrand === "V1135") brand = "LUXE";
-                else brand = "DEWY";
-                priceValue = 44000; 
-            } else if (["DL107", "DL108", "V2242", "V2250", "V2243", "V2244"].includes(upperForBrand)) {
-                brand = (upperForBrand.startsWith("DL")) ? "Dolce VIVIAN" : "VIVIAN"; priceValue = 44000;
-                if (upperForBrand === "V2244") brand = "SUN MODE WEDDING"; 
-            } else if (upperForBrand === "V2249") {
-                brand = "Lulu felice"; priceValue = 66000;
-            } else if (upperForBrand === "V2198") {
-                brand = "Klosir";
-            } else if (upperForBrand === "V2151" || upperForBrand === "V2221") {
-                brand = "Ballerina";
-            } else if (upperForBrand.startsWith("V2144") || upperForBrand === "V2212") {
-                brand = "L'ATELIER MARIAGE";
-            } else if (upperForBrand === "V2177") {
-                brand = "SPIRAL GIRL";
-            } else if (upperForBrand === "V2178") {
-                brand = "NATURAL BEAUTY";
-            } else if (upperForBrand === "V2173") {
-                brand = "HARDY AMIES";
-            } else if (upperForBrand === "V2217" || upperForBrand === "V2222") {
-                brand = "Brilliantayu";
-            } else if (upperForBrand === "V2210") {
-                brand = "raffiller";
-            } else if (upperForBrand === "V3086") {
-                brand = "LANVIN";
-            } else if (upperForBrand === "V3119") {
-                brand = "Zelda";
-            } else if (upperForBrand === "V2186") {
-                brand = "NICOLE";
-            } else if (upperForBrand === "FK0149" || upperForBrand === "FK0450") {
-                brand = "VIVIAN";
-            } else if (upperForBrand.match(/^(新大和黒|新大和白)$/)) {
-                brand = "紋付"; brandScore = 10;
-            // ----------------------------------------------------
-            // 和装のカテゴリ（色打掛・白無垢など）と並び順を定義
-            // ----------------------------------------------------
-            } else if (isIrouchikake || ["K080", "K081", "K099", "K30", "K43", "K122", "K85"].some(k => upperForBrand === k) || isUchikake) {
-                brand = "色打掛"; brandScore = 1; // 色打掛を一番上に表示
-            } else if (isShiromuku || ["K119", "K126", "K128", "K068"].includes(upperForBrand)) {
-                brand = "白無垢"; brandScore = 2; // 白無垢を二番目に表示
-            } else if (isAkamuku) {
-                brand = "赤無垢"; brandScore = 3; displayName = "K-127"; // 赤無垢を三番目に表示
-            } else if (isHikifurisode) {
-                brand = "引振袖"; brandScore = 4; // 引振袖を四番目に表示
-            } else if (originalName.match(/SOPHIA|URSULA|SIBILLA|SISSI|ADELAIDE|CRISTINA|LUCIA|ANTONIO/)) {
-                brand = "ANTONIO RIVA"; priceValue = 220000;
-            } else if (upperForBrand.match(/^(EN|E0|KF|R10|RA10|GENOISE)/)) {
-                brand = "IMPORT SELECTION"; priceValue = 132000;
-            } else if (upperForBrand.match(/^KH/) || upperForBrand === "V2192" || upperForBrand === "KH577") {
-                brand = "KIYOKO HATA"; priceValue = 88000;
-            } else if (upperForBrand.match(/^ST/) || upperForBrand.match(/^STB/)) {
-                brand = "SACHIKO TSUTSUI"; priceValue = 88000; 
-            } else if (upperForBrand.match(/^(V1125|V1140|V1141|V1151|V2176|V2182|V2239|V2225|V2157|V2255)/)) {
-                brand = "ISAMU MORITA"; priceValue = 66000;
-            } else if (upperForBrand === "V2213" || upperForBrand === "V2215") {
-                brand = "Lulu Felice"; priceValue = 66000; 
-            } else if (upperForBrand.startsWith("JILL") || originalName.includes("JILL")) {
-                brand = "JILL STUART"; priceValue = 66000;
-            } else if (upperForBrand.startsWith("ANT")) {
-                brand = "ANTEPRIMA"; priceValue = 66000;
-            } else if (upperForBrand.startsWith("LA")) {
-                brand = "LAURA ASHLEY"; priceValue = 66000;
-            } else if (upperForBrand.startsWith("RV") && !upperForBrand.startsWith("RVT") || ["RV105", "RV106", "RV107"].includes(upperForBrand)) {
-                brand = "Royal VIVIAN"; priceValue = 88000;
-            } else if (upperForBrand.startsWith("DL") || upperForBrand.startsWith("DLC")) {
-                brand = "Dolce VIVIAN"; priceValue = 44000;
-            } else if (upperForBrand.startsWith("RVT") || upperForBrand.startsWith("V3") || upperForBrand.startsWith("FK")) {
-                brand = (upperForBrand.startsWith("RVT")) ? "Royal VIVIAN" : "VIVIAN";
-                priceValue = 44000;
-            } else if (upperForBrand === "V1139") {
-                brand = "AMANTHA BRIDE"; priceValue = 44000;
-            } else if (upperForBrand.match(/(白無垢|色無垢|引振袖|打掛|大和|K\d+|SD\d+)/)) {
-                brand = "TRADITIONAL"; brandScore = 5;
+            const c = { u: upperForBrand, originalName, isIrouchikake, isUchikake, isShiromuku, isAkamuku, isHikifurisode };
+            const s = { brand, priceValue, brandScore, displayName };
+            for (const rule of BRAND_RULES) {
+                if (rule.match(c)) { rule.apply(s, c); break; }
             }
+            brand = s.brand; priceValue = s.priceValue; brandScore = s.brandScore; displayName = s.displayName;
         } // End of !isAccessory
 
         // --- 和装の金額一括設定と例外指定 ---
